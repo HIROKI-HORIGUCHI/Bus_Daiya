@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TDUBusTime</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <header>
+      <div class="header_title">
+        <%= link_to("TDUBusTime", root_path) %>
+        <%= link_to("大学へ行く", root_path) %>
+        <%= link_to("最寄り駅へ帰る", home_go_home_path) %>
+      </div>
+    </header>
+    <%= yield %>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+<div class="main">
+  <div class="main_1">
+    <h1　class="string">目的地を選択してください</h1>
+    <%= form_with url: home_go_home_result_path, method: :get, local: true do |form| %>
+      <h1 class="string_1">現在地:鳩山キャンパス</h1>
+      <span class="yajirusi">→</span>
+      <h1 class="string_1">目的地:</h1>
+      <%= form.select :destination, ['高坂駅','北坂戸駅','熊谷駅','鴻巣駅'], { include_blank: false, selected: '鳩山キャンパス' }, { id: "select", class: "main_select" } %>
+      <%= form.submit '検索' %>
+    <% end %>
+  </div>
+</div>

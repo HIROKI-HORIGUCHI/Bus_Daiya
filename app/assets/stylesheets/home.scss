@@ -1,0 +1,44 @@
+// Place all the styles related to the Home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.main{
+  width: 80%;
+  max-width: 700px;
+  margin: 20px auto;
+  height: 200px;
+  background-color: #F6F6F6;
+}
+
+.main_1 h1{
+  display: inline;
+  font-size: 25px;
+}
+
+.string_1 h1{
+  font-size: 10px;
+  color: black;
+}
+
+.main_select{
+  font-size: 25px;
+}
+
+.submit_botton{
+  font-size: 25px;
+  margin: 20px auto;
+}
+
+.yajirusi{
+  font-size: 25px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+input{
+  font-size: 30px;
+  width: 80px;
+  height: 20px;
+  padding: 20px 345px 345px 20px;
+  text-align: center;
+}
