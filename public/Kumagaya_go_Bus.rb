@@ -1,6 +1,6 @@
 
-hour_now = rand(24)
-minutes_now = rand(60) #00:00~23:59という前提にしたため、書き換えています
+hour_now = ARGV[0].to_i
+minutes_now = ARGV[1].to_i #00:00~23:59という前提にしたため、書き換えています
 
 kumagaya_daiya = ["08:05","08:15","08:20","10:00","10:05","10:10","12:30","12:40","14:30","16:20"]
 
@@ -42,15 +42,10 @@ can_take_kumagaya_minute.each do |kumagaya|#00:00からの時間（分）を元�
   can_take_kumagaya.push(add_zero(kumagaya_hour) + ":" + add_zero(kumagaya_minute))
 end
 
-what_time_now = add_zero(hour_now) + ':' + add_zero(minutes_now)
+
 
 if can_take_kumagaya.empty?;
-  p '現在時刻は,' + what_time_now.to_s
-  p '今日のダイヤはもうありません。以下が平日の熊谷駅発ダイヤです'
-  kumagaya_daiya.each do |kumagaya|
-    p kumagaya
-  end
+  return['今日のダイヤはもうありません。以下が平日の熊谷駅発ダイヤです',kumagaya_daiya]
 else;
-  p '現在時刻は,' + what_time_now.to_s
-  p can_take_kumagaya
+  return(can_take_kumagaya)
 end

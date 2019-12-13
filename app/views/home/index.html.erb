@@ -3,7 +3,7 @@
     <h1　class="string">現在地を選択してください</h1>
     <%= form_with url: home_result_path, method: :get, local: true do |form| %>
       <h1 class="string_1">現在地:</h1>
-      <%= form.select :present_location, ['高坂駅','北坂戸駅','熊谷駅','鴻巣駅'], { include_blank: false, selected: '高坂駅' }, { id: "select", class: "main_select" } %>
+      <%= form.select :present_location, ['高坂駅・北坂戸駅','熊谷駅'], { include_blank: false, selected: '高坂駅・北坂戸駅' }, { id: "select", class: "main_select" } %>
       <span class="yajirusi">→</span>
       <h1 class="string_1">目的地:鳩山キャンパス</h1>
       <%= form.submit '検索' %>

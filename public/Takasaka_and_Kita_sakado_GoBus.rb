@@ -1,7 +1,7 @@
 
-hour_now = 18
-minutes_now = 30 #00:00~23:59という前提にしたため、書き換えています
-#
+hour_now = ARGV[0]
+minutes_now = ARGV[1] #00:00~23:59という前提にしたため、書き換えています
+
 takasaka_daiya = ["08:20","08:25","08:28","08:30","08:35","08:41","08:42","08:45","08:49","08:50","08:55","08:58",
                   "09:01","09:05","09:07","09:10","09:11","09:15","09:26","09:33","09:41","09:50","09:56",
                   "10:04","10:10","10:20","10:26","10:29","10:36","10:40","10:42","10:43","10:45","10:52","10:53","10:56",
@@ -95,26 +95,26 @@ can_take_kita_sakado_minute.each do |kita_sakado|#00:00からの時間（分）�
   can_take_kita_sakado.push(add_zero(kita_sakado_hour) + ":" + add_zero(kita_sakado_minute))
 end
 
-what_time_now = add_zero(hour_now) + ':' + add_zero(minutes_now)
-p '現在時刻は,' + what_time_now.to_s
 
-if can_take_takasaka.empty? then
-  p '今日のダイヤはもうありません。以下が平日の高坂駅発ダイヤです'
-  takasaka_daiya.each do |takasaka|
-    p takasaka
-  end
+if can_take_takasaka.empty? && can_take_kita_sakado.empty?;
+  print '今日のバスはもうありません。'
+elsif !can_take_takasaka.empty? && can_take_kita_sakado.empty?;
+  print ['高坂駅発大学行きバスダイヤです。北坂戸駅発はもうありません。',can_take_takasaka]
+elsif !can_take_takasaka.empty? && !can_take_kita_sakado.empty?;
+  print [can_take_takasaka,can_take_kita_sakado]
 else;
-  p '高坂駅発大学行きバスのダイヤです'
-  p can_take_takasaka
+  print [takasaka_daiya,kita_sakado_daiya]
 end
 
 
-if can_take_kita_sakado.empty? then
-  p '今日のダイヤはもうありません。高坂駅を経由してください。'
-  # kita_sakado_daiya.each do |kita_sakado|
-  #   p kita_sakado
-  # end
-else;
-  p '北坂戸駅発大学行きバスのダイヤです'
-  p can_take_kita_sakado
-end
+
+
+
+# if can_take_kita_sakado.empty? then
+#   return('今日のバスはもうありません。高坂駅を経由してください。高坂駅発のバスがない場合、もうバスはありません。')
+#   # kita_sakado_daiya.each do |kita_sakado|
+#   #   p kita_sakado
+#   # end
+# else;
+#   return('北坂戸駅発大学行きバスのダイヤです',can_take_kita_sakado)
+# end
