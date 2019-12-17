@@ -2,10 +2,24 @@
   <div class="main_1">
     <h1　class="string">目的地を選択してください</h1>
     <%= form_with url: home_go_home_result_path, method: :get, local: true do |form| %>
+      <p>授業期間中or休業期間中、平日or土曜日を選択してください。
+        <%= form.select :selected_period, ['授業期間中','休業期間中'], { include_blank: false, selected: '授業期間中' }, { id: "select", class: "period_select" } %>
+        <% if @times[2] != 6 %>
+          <%= form.select :selected_date, ['平日','土曜日'], { include_blank: false, selected: '平日' }, { id: "select", class: "date_select" } %>
+        <% elsif @times[2] == 6 %>
+          <%= form.select :selected_date, ['平日','土曜日'], { include_blank: false, selected: '土曜日' }, { id: "select", class: "date_select" } %>
+        <% end %>
+      </p>
       <h1 class="string_1">現在地:鳩山キャンパス</h1>
       <span class="yajirusi">→</span>
       <h1 class="string_1">目的地:</h1>
       <%= form.select :destination, ['高坂駅・北坂戸駅','熊谷駅'], { include_blank: false, selected: '鳩山キャンパス' }, { id: "select", class: "main_select" } %>
+      <p>※キャンパスから高坂駅までの所要時間は約8分です(大学HPから)</p>
+      <p>※キャンパスから北坂戸駅までの所要時間は約12分です(大学HPから)</p>
+      <p>鳩山キャンパスからの出発時刻を選択してください。
+        <%= form.select :selected_hour, ["時間",0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23], { include_blank: false, selected: @times[0] }, { id: "select", class: "watch_select" } %>
+        <%= form.select :selected_minutes, ["分",0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59], { include_blank: false, selected: @times[1] }, { id: "select", class: "watch_select" } %>
+      </p>
       <%= form.submit '検索' %>
     <% end %>
   </div>
