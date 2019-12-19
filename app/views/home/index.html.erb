@@ -1,27 +1,42 @@
 <div class="main">
   <div class="main_1">
-    <h1　class="string">現在地を選択してください</h1>
+    <h1 class="Attention_1">There are 3 or 4 selections below.</h1>
+    <ul class="Atenntion_2">
+      <li>1.Select the Term of Class or not term of that.</li>
+      <li>2.Select the Weekdays or saturday.</li>
+      <li>3.Select the place where you are.</li>
+      <li>4.Select the hour and minutes. If you don't select, now hour and minutes are default.</li>
+    </ul>
+
     <%= form_with url: home_result_path, method: :get, local: true do |form| %>
-      <p>授業期間中or休業期間中、平日or土曜日を選択してください。
-        <%= form.select :selected_period, ['授業期間中','休業期間中'], { include_blank: false, selected: '授業期間中' }, { id: "select", class: "date_select" } %>
-        <% if @times[2] != 6  %>
-          <%= form.select :selected_date, ['平日','土曜日'], { include_blank: false, selected: '平日' }, { id: "select", class: "date_select" } %>
-        <% elsif @times[2] == 6 %>
-          <%= form.select :selected_date, ['平日','土曜日'], { include_blank: false, selected: '土曜日' }, { id: "select", class: "date_select" } %>
-        <% end %>
-      </p>
-      <p><%= params[:selected_period] %></p>
-      <h1 class="string_1">現在地:</h1>
-      <%= form.select :present_location, ['高坂駅・北坂戸駅','熊谷駅'], { include_blank: false, selected: '高坂駅・北坂戸駅' }, { id: "select", class: "main_select" } %>
-      <span class="yajirusi">→</span>
-      <h1 class="string_1">目的地:鳩山キャンパス</h1>
-      <p>※高坂駅からキャンパスまでの所要時間は約8分です(大学HPから)</p>
-      <p>※北坂戸駅からキャンパスまでの所要時間は約12分です(大学HPから)</p>
-      <p>出発駅からの出発予定時刻を選択してください。
-        <%= form.select :selected_hour, ["時間",0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23], { include_blank: false, selected: @times[0] }, { id: "select", class: "watch_select" } %>
-        <%= form.select :selected_minutes, ["分",0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59], { include_blank: false, selected: @times[1] }, { id: "select", class: "watch_select" } %>
-      </p>
-      <%= form.submit '検索' %>
+      <div class="selected_period_and_date">
+        <div class="selected_period">
+          <strong>Term:</strong>
+          <%= form.select :selected_period, ['授業期間中','休業期間中'], { include_blank: false, selected: '授業期間中' }, { id: "select", class: "period_select" } %>
+          <strong>Day:</strong>
+          <% if @times[2] != 6  %>
+            <%= form.select :selected_date, ['平日','土曜日'], { include_blank: false, selected: '平日' }, { id: "select", class: "date_select" } %>
+          <% elsif @times[2] == 6 %>
+            <%= form.select :selected_date, ['平日','土曜日'], { include_blank: false, selected: '土曜日' }, { id: "select", class: "date_select" } %>
+          <% end %>
+        </div>
+      </div>
+      <div class="select_location_or_destination">
+        <span class="start_index">From</span>
+        <%= form.select :present_location, ['高坂駅・北坂戸駅','熊谷駅'], { include_blank: false, selected: '高坂駅・北坂戸駅' }, { id: "select", class: "main_select" } %>
+        <span>=></span>
+        <span class="goal_index">To</span>
+        <h1>Hatoyama Campus</h1>
+      </div>
+      <div class="select_time">
+        <strong>Hour:</strong>
+        <%= form.select :selected_hour, [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23], { include_blank: false, selected: @times[0] }, { id: "select", class: "watch_select" } %>
+        <strong>Minutes:</strong>
+        <%= form.select :selected_minutes, [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59], { include_blank: false, selected: @times[1] }, { id: "select", class: "watch_select" } %>
+      </div>
+      <div class="submit">
+        <%= form.submit '検索' %>
+      </div>
     <% end %>
   </div>
 </div>

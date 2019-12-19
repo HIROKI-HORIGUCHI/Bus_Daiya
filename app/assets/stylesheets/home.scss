@@ -2,12 +2,27 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+
+
+
 .main{
   width: 80%;
-  max-width: 700px;
+  width: 750px;
   margin: 20px auto;
-  max-height: 1000px;
+  max-height:  100%;
   background-color: #F6F6F6;
+}
+
+.Atenntion_1 h1{
+  font-size: 25px;
+}
+
+.Attention_2 li{
+  font-size: 18px;
+}
+
+.header_title{
+  margin-left: 225px;
 }
 
 .main_1 h1{
@@ -22,12 +37,12 @@
 
 .main_select{
   font-size: 25px;
-  margin-top: 55px;
 }
 
-.submit_botton{
-  font-size: 25px;
-  margin: 20px auto;
+.submit{
+  margin-top: 20px;
+  font-size: 40px;
+
 }
 
 .yajirusi{
@@ -36,10 +51,107 @@
   margin-left: 5px;
 }
 
+.selected_period_and_date{
+  text-align: center;
+  width: 750px;
+  height: 50px;
+}
+
+.submit{
+  width: 750;
+  text-align: center;
+  padding-right: 10px;
+}
+
+
 input{
   font-size: 30px;
   width: 80px;
   height: 20px;
   padding: 20px 345px 345px 20px;
+  text-align: center;
+}
+
+.summary_list{
+  border: 1px solid #60b4d0;
+}
+
+.summary_list .list_border{
+  border-bottom: 1px dotted #ccc
+}
+
+.summary_list .count_left_time{
+  background-color: #60b4d0;
+}
+
+.summary_list dl{
+  height: 25px;
+  background-color: white;
+}
+
+.summary_list dt{
+  color: #08c;
+  width: 170px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  padding-top: 4px;
+}
+
+.summary_list .left_required_time{
+  width: 117px;
+  padding-top: 10px;
+  height: 34px;
+  font-weight: bold;
+}
+
+.summary_list .left_required_time .text{
+  padding-left: 19px;
+  font-size: 14px;
+  padding-top: 3px;
+}
+
+
+.main_title {
+    display: inline-block;
+    width: 640px;
+    line-height: 25px;
+}
+
+.start_index {
+    padding: 3px 4px 2px 4px;
+    margin-right: 2px;
+    font-size: 12px;
+    background-color: #5e92c4;
+    color: #FFF;
+    font-weight: bold;
+}
+
+.goal_index {
+    padding: 3px 4px 2px 4px;
+    margin-right: 2px;
+    font-size: 12px;
+    background-color: #c76daa;
+    color: #FFF;
+    font-weight: bold;
+}
+
+ul {
+  list-style: none;
+}
+
+.warning h4{
+  color: red;
+  font-weight: bold;
+}
+
+.select_location_or_destination{
+  text-align: center;
+  width: 750px;
+}
+
+.select_time{
+  margin-top: 30px;
+  width: 750px;
   text-align: center;
 }

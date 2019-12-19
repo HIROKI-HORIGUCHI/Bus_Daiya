@@ -10,25 +10,14 @@ class HomeController < ApplicationController
     @times = [time.hour,time.min,time.wday]
   end
 
-
-  # どこどこ駅発大学行きメソッド
   def result
     #日時、曜日関係
     time = Time.now
-    if params[:selected_hour] == "時間" && params[:selected_minutes] == "分";
-      time_1 = time.hour
-      time_2 = time.min
-      # time_3 = time.wday#[1.Mon2.Tue3.Wed4.Thurs5.Fri6.Sat7.Sun]
-    else;
-      time_1 = params[:selected_hour].to_i #Ex.0,1,2,3,4,5,/~/,19,20,21,22,23
-      time_2 = params[:selected_minutes].to_i #Ex,0,1,2,3,4,/~/55,56,57,58,59
-    end
-
+    time_1 = params[:selected_hour].to_i #Ex.0,1,2,3,4,5,/~/,19,20,21,22,23
+    time_2 = params[:selected_minutes].to_i #Ex,0,1,2,3,4,/~/55,56,57,58,59
     @time_4 = [time_1.to_s,time_2.to_s]
-    #paramsから取得する現在地情報、つまり、駅名
-    #高坂駅・北坂戸駅 or 熊谷駅
 
-
+    #それぞれの処理に応じて、別々のメソッドを呼び出すことで対応する。
     @print_user_location = params[:present_location]
     if params[:selected_period] == "授業期間中" then
       if params[:present_location] == "高坂駅・北坂戸駅" && params[:selected_date] == "平日";
@@ -44,11 +33,11 @@ class HomeController < ApplicationController
       if params[:present_location] == "高坂駅・北坂戸駅" && params[:selected_date] == "平日" then
         @result = Go_from_Takasaka_or_Kitasakado_restperiod(time_1,time_2)
       elsif params[:present_location] == "高坂駅・北坂戸駅" && params[:selected_date] == "土曜日";
-        @result = "休業期間中の土曜日です。休業期間中はバスが運行していないので、熊谷駅北口から発車する課金バスをご利用ください。運賃は役600"
+        @result = "休業期間中の土曜日です。休業期間中の休日、祝日はバスが運行していないので、高坂駅から発車する課金バスをご利用ください。"
       elsif params[:present_location] == "熊谷駅" && params[:selected_date] == "平日";
         @result = Go_from_Kumagaya_restpriod(time_1,time_2)
       elsif params[:present_location] == "熊谷駅" && params[:selected_date] == "土曜日";
-        @result = "休業期間中の土曜日です。休業期間中はバスが運行していないので課金バスをご利用ください"
+        @result = "休業期間中の土曜日です。休業期間中の休日、祝日はバスが運行していません。ご注意ください。大学に行く場合は、熊谷駅から発車する課金バスをご利用ください"
       end
     end
   end
@@ -56,16 +45,10 @@ class HomeController < ApplicationController
 
 
   def go_home_result
-    # 時間を管理してやる。これで入力された時間があれば代入すればいいし、そうじゃないなら現在時刻で調べてくれる。
+    # 日時、曜日関係
     time = Time.now
-    if params[:selected_hour] == "時間" && params[:selected_minutes] == "分";
-      time_1 = time.hour #Ex.0,1,2,3,4,5,/~/,19,20,21,22,23
-      time_2 = time.min #Ex,0,1,2,3,4,/~/55,56,57,58,59
-      # time_3 = time.wday#[1.Mon2.Tue3.Wed4.Thurs5.Fri6.Sat7.Sun]
-    else;
-      time_1 = params[:selected_hour].to_i
-      time_2 = params[:selected_minutes].to_i
-    end
+    time_1 = params[:selected_hour].to_i
+    time_2 = params[:selected_minutes].to_i
     @time_4 = [time_1.to_s,time_2.to_s]
 
     # ユーザーの目的地(destination)を取得する。これは、Viewで使う予定だからやる
@@ -73,6 +56,7 @@ class HomeController < ApplicationController
 
     # 期間の場合わけ１：授業期間の場合
     if params[:selected_period] == "授業期間中" then
+      #目的地と、その日が平日なのか土曜日なのかで場合わけ
       if params[:destination] == "高坂駅・北坂戸駅" && params[:selected_date] == "平日" then
         @result = Takasaka_and_Kita_sakado_GoBackBus(time_1,time_2)
       elsif params[:destination] == "熊谷駅" && params[:selected_date] == "平日";
@@ -82,34 +66,24 @@ class HomeController < ApplicationController
       elsif params[:destination] == "熊谷駅" && params[:selected_date] == "土曜日";
         @result = Kumagaya_GoBack_Bus_saturday(time_1,time_2)
       end
-  #
-  #
-    # 期間の場合わけ２：休業期間の場合
     elsif params[:selected_period] == "休業期間中";
       if params[:destination] == "高坂駅・北坂戸駅" && params[:selected_date] == "平日" then
         @result = Takasaka_and_Kita_sakado_GoBackBus_restperiod(time_1,time_2)
-      elsif params[:present_location] == "高坂駅・北坂戸駅" && params[:selected_date] == "土曜日";
-        @result = "休業期間中の土曜日です。休業期間中はバスが運行していないので、課金バスを別途ご利用ください。"
-      elsif params[:destination] == "熊谷駅";
+      elsif params[:destination] == "高坂駅・北坂戸駅" && params[:selected_date] == "土曜日";
+        @result = "休業期間中の土曜日です。休業期間中の休日、祝日はバスが運行していません。"
+      elsif params[:destination] == "熊谷駅" && params[:selected_date] == "平日";
         @result = Kumagaya_GoBack_Bus_restperiod(time_1,time_2)
       elsif params[:destination] == "熊谷駅" && params[:selected_date] == "土曜日";
-        @result = "休業期間中の土曜日です。休業期間中はバスが運行していないので、熊谷駅北口から発車する課金バスを別途ご利用ください。"
+        @result = "休業期間中の土曜日です。休業期間中の休日、祝日はバスが運行していません。"
       end
     end
   end
 
-
-
-
-
-
-
-
   private
-  # この４つを作成する！
+
   def Go_from_Takasaka_or_Kitasakado_restperiod(hour,minutes)
     hour_now = hour
-    minutes_now = minutes #00:00~23:59という前提にしたため、書き換えています
+    minutes_now = minutes
 
     takasaka_daiya = ["08:42","08:56",
                       "09:11","09:26","09:33","09:41","09:56",
@@ -142,38 +116,38 @@ class HomeController < ApplicationController
 
 
 
-    now = hour_now*60 + minutes_now #現在時刻を00:00からの時間（分）に直す
+    now = hour_now*60 + minutes_now
 
     can_take_takasaka_minute = []
     can_take_kita_sakado_minute = []
 
 
-    takasaka_list_minute.each do |takasaka|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    takasaka_list_minute.each do |takasaka|
       if can_take_takasaka_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif takasaka > now
         can_take_takasaka_minute.push(takasaka)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
-    kita_sakado_list_minute.each do |kita_sakado|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    kita_sakado_list_minute.each do |kita_sakado|
       if can_take_kita_sakado_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif kita_sakado > now
         can_take_kita_sakado_minute.push(kita_sakado)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
 
     can_take_takasaka = []
-    can_take_takasaka_minute.each do |takasaka|#00:00からの時間（分）を元の時刻に戻す
+    can_take_takasaka_minute.each do |takasaka|
       takasaka_minute = takasaka % 60
       takasaka_hour = (takasaka - takasaka_minute) / 60
       can_take_takasaka.push(add_zero(takasaka_hour) + ":" + add_zero(takasaka_minute))
     end
 
     can_take_kita_sakado = []
-    can_take_kita_sakado_minute.each do |kita_sakado|#00:00からの時間（分）を元の時刻に戻す
+    can_take_kita_sakado_minute.each do |kita_sakado|
       kita_sakado_minute = kita_sakado % 60
       kita_sakado_hour = (kita_sakado - kita_sakado_minute) / 60
       can_take_kita_sakado.push(add_zero(kita_sakado_hour) + ":" + add_zero(kita_sakado_minute))
@@ -202,18 +176,18 @@ class HomeController < ApplicationController
 
 
 
-    now = hour_now*60 + minutes_now #現在時刻を00:00からの時間（分）に直す
+    now = hour_now*60 + minutes_now
     can_take_kumagaya_minute = []
-    kumagaya_list_minute.each do |kumagaya|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    kumagaya_list_minute.each do |kumagaya|
       if can_take_kumagaya_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif kumagaya > now
         can_take_kumagaya_minute.push(kumagaya)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
     can_take_kumagaya = []
-    can_take_kumagaya_minute.each do |kumagaya|#00:00からの時間（分）を元の時刻に戻す
+    can_take_kumagaya_minute.each do |kumagaya|
       kumagaya_minute = kumagaya % 60
       kumagaya_hour = (kumagaya - kumagaya_minute) / 60
       can_take_kumagaya.push(add_zero(kumagaya_hour) + ":" + add_zero(kumagaya_minute))
@@ -231,7 +205,7 @@ class HomeController < ApplicationController
 
   def Takasaka_and_Kita_sakado_GoBackBus_restperiod(hour,minutes)
     hour_now = hour
-    minutes_now = minutes #00:00~23:59という前提にしたため、書き換えています
+    minutes_now = minutes
 
 
     takasaka_daiya = ["9:46",
@@ -268,36 +242,36 @@ class HomeController < ApplicationController
 
 
 
-    now = hour_now*60 + minutes_now #現在時刻を00:00からの時間（分）に直す
+    now = hour_now*60 + minutes_now
 
 
     can_take_takasaka_minute = []
-    takasaka_list_minute.each do |takasaka|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    takasaka_list_minute.each do |takasaka|
       if can_take_takasaka_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif takasaka >= now
         can_take_takasaka_minute.push(takasaka)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
     can_take_kita_sakado_minute = []
-    kita_sakado_list_minute.each do |kita_sakado|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    kita_sakado_list_minute.each do |kita_sakado|
       if can_take_kita_sakado_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif kita_sakado >= now
         can_take_kita_sakado_minute.push(kita_sakado)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
     can_take_takasaka = []
-    can_take_takasaka_minute.each do |takasaka|#00:00からの時間（分）を元の時刻に戻す
+    can_take_takasaka_minute.each do |takasaka|
       takasaka_minute = takasaka % 60
       takasaka_hour = (takasaka - takasaka_minute) / 60
       can_take_takasaka.push(add_zero(takasaka_hour) + ":" + add_zero(takasaka_minute))
     end
 
     can_take_kita_sakado = []
-    can_take_kita_sakado_minute.each do |kita_sakado|#00:00からの時間（分）を元の時刻に戻す
+    can_take_kita_sakado_minute.each do |kita_sakado|
       kita_sakado_minute = kita_sakado % 60
       kita_sakado_hour = (kita_sakado - kita_sakado_minute) / 60
       can_take_kita_sakado.push(add_zero(kita_sakado_hour) + ":" + add_zero(kita_sakado_minute))
@@ -314,7 +288,7 @@ class HomeController < ApplicationController
 
   def Kumagaya_GoBack_Bus_restperiod(hour,minutes)
     hour_now = hour
-    minutes_now = minutes #00:00~23:59という前提にしたため、書き換えています
+    minutes_now = minutes
 
     kumagaya_daiya = ["11:45",
                       "15:30",
@@ -324,28 +298,28 @@ class HomeController < ApplicationController
     kumagaya_list_minute = [705, 930, 1040, 1150]
 
 
-    now = hour_now*60 + minutes_now #現在時刻を00:00からの時間（分）に直す
+    now = hour_now*60 + minutes_now
     can_take_kumagaya_minute = []
 
-    kumagaya_list_minute.each do |kumagaya|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    kumagaya_list_minute.each do |kumagaya|
       if can_take_kumagaya_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif kumagaya >= now
         can_take_kumagaya_minute.push(kumagaya)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
     can_take_kumagaya = []
-    can_take_kumagaya_minute.each do |kumagaya|#00:00からの時間（分）を元の時刻に戻す
+    can_take_kumagaya_minute.each do |kumagaya|
       kumagaya_minute = kumagaya % 60
       kumagaya_hour = (kumagaya - kumagaya_minute) / 60
       can_take_kumagaya.push(add_zero(kumagaya_hour) + ":" + add_zero(kumagaya_minute))
     end
 
     if can_take_kumagaya.empty?;
-      return['今日のダイヤはもうありません。以下が平日の大学発熊谷駅行きダイヤです。各自、遅れないよう確認してください。',kumagaya_daiya]
+      return['休業期間-平日-熊谷ダイヤなし']
     else;
-      return(can_take_kumagaya)
+      return['休業期間-土曜-熊谷ダイヤあり',can_take_kumagaya]
     end
   end
 
@@ -362,7 +336,7 @@ class HomeController < ApplicationController
   def GO_from_Takasaka_or_Kitasakado(hour,minutes)
 
     hour_now = hour
-    minutes_now = minutes #00:00~23:59という前提にしたため、書き換えています
+    minutes_now = minutes
 
     takasaka_daiya = ["08:20","08:25","08:28","08:30","08:35","08:41","08:42","08:45","08:49","08:50","08:55","08:58",
                       "09:01","09:05","09:07","09:10","09:11","09:15","09:26","09:33","09:41","09:50","09:56",
@@ -403,38 +377,38 @@ class HomeController < ApplicationController
 
 
 
-    now = hour_now*60 + minutes_now #現在時刻を00:00からの時間（分）に直す
+    now = hour_now*60 + minutes_now
 
     can_take_takasaka_minute = []
     can_take_kita_sakado_minute = []
 
 
-    takasaka_list_minute.each do |takasaka|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    takasaka_list_minute.each do |takasaka|
       if can_take_takasaka_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif takasaka > now
         can_take_takasaka_minute.push(takasaka)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
-    kita_sakado_list_minute.each do |kita_sakado|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    kita_sakado_list_minute.each do |kita_sakado|
       if can_take_kita_sakado_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif kita_sakado > now
         can_take_kita_sakado_minute.push(kita_sakado)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
 
     can_take_takasaka = []
-    can_take_takasaka_minute.each do |takasaka|#00:00からの時間（分）を元の時刻に戻す
+    can_take_takasaka_minute.each do |takasaka|
       takasaka_minute = takasaka % 60
       takasaka_hour = (takasaka - takasaka_minute) / 60
       can_take_takasaka.push(add_zero(takasaka_hour) + ":" + add_zero(takasaka_minute))
     end
 
     can_take_kita_sakado = []
-    can_take_kita_sakado_minute.each do |kita_sakado|#00:00からの時間（分）を元の時刻に戻す
+    can_take_kita_sakado_minute.each do |kita_sakado|
       kita_sakado_minute = kita_sakado % 60
       kita_sakado_hour = (kita_sakado - kita_sakado_minute) / 60
       can_take_kita_sakado.push(add_zero(kita_sakado_hour) + ":" + add_zero(kita_sakado_minute))
@@ -454,7 +428,7 @@ class HomeController < ApplicationController
 
   def Go_from_Takasaka_or_Kitasakado_saturday(hour,minutes)
     hour_now = hour
-    minutes_now = minutes #00:00~23:59という前提にしたため、書き換えています
+    minutes_now = minutes
 
     takasaka_daiya = ["08:35","08:55",
                       "09:05","09:15","09:35","09:45","09:54",
@@ -485,44 +459,42 @@ class HomeController < ApplicationController
     kita_sakado_list_minute = [522, 582, 618, 710, 738, 798, 888, 918].freeze
 
 
-    now = hour_now*60 + minutes_now #現在時刻を00:00からの時間（分）に直す
+    now = hour_now*60 + minutes_now
 
     can_take_takasaka_minute = []
     can_take_kita_sakado_minute = []
 
 
-    takasaka_list_minute.each do |takasaka|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    takasaka_list_minute.each do |takasaka|
       if can_take_takasaka_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif takasaka > now
         can_take_takasaka_minute.push(takasaka)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
-    kita_sakado_list_minute.each do |kita_sakado|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    kita_sakado_list_minute.each do |kita_sakado|
       if can_take_kita_sakado_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif kita_sakado > now
         can_take_kita_sakado_minute.push(kita_sakado)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
 
     can_take_takasaka = []
-    can_take_takasaka_minute.each do |takasaka|#00:00からの時間（分）を元の時刻に戻す
+    can_take_takasaka_minute.each do |takasaka|
       takasaka_minute = takasaka % 60
       takasaka_hour = (takasaka - takasaka_minute) / 60
       can_take_takasaka.push(add_zero(takasaka_hour) + ":" + add_zero(takasaka_minute))
     end
 
     can_take_kita_sakado = []
-    can_take_kita_sakado_minute.each do |kita_sakado|#00:00からの時間（分）を元の時刻に戻す
+    can_take_kita_sakado_minute.each do |kita_sakado|
       kita_sakado_minute = kita_sakado % 60
       kita_sakado_hour = (kita_sakado - kita_sakado_minute) / 60
       can_take_kita_sakado.push(add_zero(kita_sakado_hour) + ":" + add_zero(kita_sakado_minute))
     end
-
-
     if can_take_takasaka.empty? && can_take_kita_sakado.empty?;
       return['授業期間-土曜-高坂・北坂戸-ダイヤなし']
     elsif !can_take_takasaka.empty? && can_take_kita_sakado.empty?;
@@ -538,9 +510,9 @@ class HomeController < ApplicationController
     minutes_now = minutes
     kumagaya_daiya = ["08:05","08:15","08:20","10:00","10:05","10:10","12:30","12:40","14:30","16:20"].freeze
     kumagaya_list_minute = [485, 495, 500, 600, 605, 610, 750, 760, 870, 980].freeze
-    now = hour_now*60 + minutes_now #現在時刻を00:00からの時間（分）に直す
+    now = hour_now*60 + minutes_now
     can_take_kumagaya_minute = []
-    kumagaya_list_minute.each do |kumagaya|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    kumagaya_list_minute.each do |kumagaya|
       if can_take_kumagaya_minute.length >= 3
         break
       elsif kumagaya > now
@@ -548,7 +520,7 @@ class HomeController < ApplicationController
       end
     end
     can_take_kumagaya = []
-    can_take_kumagaya_minute.each do |kumagaya|#00:00からの時間（分）を元の時刻に戻す
+    can_take_kumagaya_minute.each do |kumagaya|
       kumagaya_minute = kumagaya % 60
       kumagaya_hour = (kumagaya - kumagaya_minute) / 60
       can_take_kumagaya.push(add_zero(kumagaya_hour) + ":" + add_zero(kumagaya_minute))
@@ -564,7 +536,6 @@ class HomeController < ApplicationController
 
 
   def Go_from_Kumagaya_saturday(hour,minutes)
-
     hour_now = hour
     minutes_now = minutes
     kumagaya_daiya = ["08:20","10:00","12:30"].freeze
@@ -573,7 +544,7 @@ class HomeController < ApplicationController
     can_take_kumagaya_minute = []
     kumagaya_list_minute.each do |kumagaya|
       if can_take_kumagaya_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif kumagaya >= now
         can_take_kumagaya_minute.push(kumagaya)
       end
@@ -595,9 +566,7 @@ class HomeController < ApplicationController
   def Takasaka_and_Kita_sakado_GoBackBus(hour,minutes)
 
     hour_now = hour
-    minutes_now = minutes #00:00~23:59という前提にしたため、書き換えています
-
-
+    minutes_now = minutes
     takasaka_daiya = ["09:46",
                       "10:07","10:16","10:30","10:46",
                       "11:01","11:16","11:22","11:31","11:46",
@@ -637,44 +606,39 @@ class HomeController < ApplicationController
                                1014, 1034, 1046, 1072, 1105, 1134, 1153, 1183, 1231].freeze
 
 
-
-
-    now = hour_now*60 + minutes_now #現在時刻を00:00からの時間（分）に直す
-
-
+    now = hour_now*60 + minutes_now
     can_take_takasaka_minute = []
-    takasaka_list_minute.each do |takasaka|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    takasaka_list_minute.each do |takasaka|
       if can_take_takasaka_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif takasaka >= now
         can_take_takasaka_minute.push(takasaka)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
     can_take_kita_sakado_minute = []
-    kita_sakado_list_minute.each do |kita_sakado|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    kita_sakado_list_minute.each do |kita_sakado|
       if can_take_kita_sakado_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif kita_sakado >= now
         can_take_kita_sakado_minute.push(kita_sakado)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
-
+    end
     can_take_takasaka = []
-    can_take_takasaka_minute.each do |takasaka|#00:00からの時間（分）を元の時刻に戻す
+    can_take_takasaka_minute.each do |takasaka|
       takasaka_minute = takasaka % 60
       takasaka_hour = (takasaka - takasaka_minute) / 60
       can_take_takasaka.push(add_zero(takasaka_hour) + ":" + add_zero(takasaka_minute))
     end
 
     can_take_kita_sakado = []
-    can_take_kita_sakado_minute.each do |kita_sakado|#00:00からの時間（分）を元の時刻に戻す
+    can_take_kita_sakado_minute.each do |kita_sakado|
       kita_sakado_minute = kita_sakado % 60
       kita_sakado_hour = (kita_sakado - kita_sakado_minute) / 60
       can_take_kita_sakado.push(add_zero(kita_sakado_hour) + ":" + add_zero(kita_sakado_minute))
     end
     if can_take_takasaka.empty? && can_take_kita_sakado.empty?;
-      return['授業-平日-高坂・北坂戸ダイヤ両方なし',takasaka_daiya,kita_sakado_daiya]
+      return['授業-平日-高坂・北坂戸ダイヤ両方なし']
     elsif !can_take_takasaka.empty? && can_take_kita_sakado.empty?;
       return['授業期間中-平日-高坂・北坂戸-北坂戸のみダイヤなし',can_take_takasaka]
     elsif !can_take_takasaka.empty? && !can_take_kita_sakado.empty?;
@@ -686,9 +650,7 @@ class HomeController < ApplicationController
 
   def Takasaka_and_Kita_sakado_GoBackBus_saturday(hour,minutes)
     hour_now = hour
-    minutes_now = minutes #00:00~23:59という前提にしたため、書き換えています
-
-
+    minutes_now = minutes
     takasaka_daiya = ["10:03","10:16","10:32","10:46",
                       "11:01","11:16","11:31","11:46",
                       "12:16","12:31","12:46",
@@ -719,39 +681,34 @@ class HomeController < ApplicationController
 
     kita_sakado_list_minute = [606, 698, 726, 786, 876, 906, 1016, 1046, 1120].freeze
 
-
-
-
-    now = hour_now*60 + minutes_now #現在時刻を00:00からの時間（分）に直す
-
-
+    now = hour_now*60 + minutes_now
     can_take_takasaka_minute = []
-    takasaka_list_minute.each do |takasaka|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    takasaka_list_minute.each do |takasaka|
       if can_take_takasaka_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif takasaka >= now
         can_take_takasaka_minute.push(takasaka)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
     can_take_kita_sakado_minute = []
-    kita_sakado_list_minute.each do |kita_sakado|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    kita_sakado_list_minute.each do |kita_sakado|
       if can_take_kita_sakado_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif kita_sakado >= now
         can_take_kita_sakado_minute.push(kita_sakado)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
     can_take_takasaka = []
-    can_take_takasaka_minute.each do |takasaka|#00:00からの時間（分）を元の時刻に戻す
+    can_take_takasaka_minute.each do |takasaka|
       takasaka_minute = takasaka % 60
       takasaka_hour = (takasaka - takasaka_minute) / 60
       can_take_takasaka.push(add_zero(takasaka_hour) + ":" + add_zero(takasaka_minute))
     end
 
     can_take_kita_sakado = []
-    can_take_kita_sakado_minute.each do |kita_sakado|#00:00からの時間（分）を元の時刻に戻す
+    can_take_kita_sakado_minute.each do |kita_sakado|
       kita_sakado_minute = kita_sakado % 60
       kita_sakado_hour = (kita_sakado - kita_sakado_minute) / 60
       can_take_kita_sakado.push(add_zero(kita_sakado_hour) + ":" + add_zero(kita_sakado_minute))
@@ -769,8 +726,7 @@ class HomeController < ApplicationController
 
   def Kumagaya_GoBack_Bus(hour,minutes)
     hour_now = hour
-    minutes_now = minutes #00:00~23:59という前提にしたため、書き換えています
-
+    minutes_now = minutes
     kumagaya_daiya = ["11:50",
                       "13:45",
                       "15:35",
@@ -779,71 +735,60 @@ class HomeController < ApplicationController
                       "19:25",
                       "20:10","20:30",
                       "21:15"].freeze
-
     kumagaya_list_minute = [710, 825, 935, 1040, 1045, 1100, 1165, 1210, 1230, 1275].freeze
-
-
-    now = hour_now*60 + minutes_now #現在時刻を00:00からの時間（分）に直す
+    now = hour_now*60 + minutes_now
     can_take_kumagaya_minute = []
 
-    kumagaya_list_minute.each do |kumagaya|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    kumagaya_list_minute.each do |kumagaya|
       if can_take_kumagaya_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif kumagaya >= now
         can_take_kumagaya_minute.push(kumagaya)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
+    end
 
     can_take_kumagaya = []
-    can_take_kumagaya_minute.each do |kumagaya|#00:00からの時間（分）を元の時刻に戻す
+    can_take_kumagaya_minute.each do |kumagaya|
       kumagaya_minute = kumagaya % 60
       kumagaya_hour = (kumagaya - kumagaya_minute) / 60
       can_take_kumagaya.push(add_zero(kumagaya_hour) + ":" + add_zero(kumagaya_minute))
     end
 
     if can_take_kumagaya.empty?;
-      return['今日のダイヤはもうありません。以下が平日の大学発熊谷駅行きダイヤです。各自、遅れないよう確認してください。',kumagaya_daiya]
+      return['授業期間-平日-熊谷ダイヤなし']
     else;
-      return(can_take_kumagaya)
+      return['授業期間-平日-熊谷ダイヤあり',can_take_kumagaya]
     end
   end
 
-
   def Kumagaya_GoBack_Bus_saturday(hour,minutes)
     hour_now = hour
-    minutes_now = minutes #00:00~23:59という前提にしたため、書き換えています
-
+    minutes_now = minutes
     kumagaya_daiya = ["11:45",
                       "15:30",
                       "17:20",
                       "18:20",
                       "19:10"].freeze
-
     kumagaya_list_minute = [705, 930, 1040, 1100, 1150].freeze
-
-
-    now = hour_now*60 + minutes_now #現在時刻を00:00からの時間（分）に直す
+    now = hour_now*60 + minutes_now
     can_take_kumagaya_minute = []
-
-    kumagaya_list_minute.each do |kumagaya|#当てはまるバスの時刻を00:00からの時間（分）のまま配列に入れる
+    kumagaya_list_minute.each do |kumagaya|
       if can_take_kumagaya_minute.length >= 3
-        break #バスが３つ当てはまれば終了
+        break
       elsif kumagaya >= now
         can_take_kumagaya_minute.push(kumagaya)
       end
-    end #当てはまるバスが２つ以下の場合はeach文が終了
-
+    end
     can_take_kumagaya = []
-    can_take_kumagaya_minute.each do |kumagaya|#00:00からの時間（分）を元の時刻に戻す
+    can_take_kumagaya_minute.each do |kumagaya|
       kumagaya_minute = kumagaya % 60
       kumagaya_hour = (kumagaya - kumagaya_minute) / 60
       can_take_kumagaya.push(add_zero(kumagaya_hour) + ":" + add_zero(kumagaya_minute))
     end
-
     if can_take_kumagaya.empty?;
-      return['今日のダイヤはもうありません。以下が平日の大学発熊谷駅行きダイヤです。各自、遅れないよう確認してください。',kumagaya_daiya]
+      return['授業期間-土曜-熊谷ダイヤなし']
     else;
-      return(can_take_kumagaya)
+      return['授業期間-土曜-熊谷ダイヤあり',can_take_kumagaya]
     end
   end
 end
