@@ -249,7 +249,7 @@ class HomeController < ApplicationController
     takasaka_list_minute.each do |takasaka|
       if can_take_takasaka_minute.length >= 3
         break
-      elsif takasaka >= now
+      elsif takasaka > now
         can_take_takasaka_minute.push(takasaka)
       end
     end
@@ -258,7 +258,7 @@ class HomeController < ApplicationController
     kita_sakado_list_minute.each do |kita_sakado|
       if can_take_kita_sakado_minute.length >= 3
         break
-      elsif kita_sakado >= now
+      elsif kita_sakado > now
         can_take_kita_sakado_minute.push(kita_sakado)
       end
     end
@@ -304,7 +304,7 @@ class HomeController < ApplicationController
     kumagaya_list_minute.each do |kumagaya|
       if can_take_kumagaya_minute.length >= 3
         break
-      elsif kumagaya >= now
+      elsif kumagaya > now
         can_take_kumagaya_minute.push(kumagaya)
       end
     end
@@ -545,7 +545,7 @@ class HomeController < ApplicationController
     kumagaya_list_minute.each do |kumagaya|
       if can_take_kumagaya_minute.length >= 3
         break
-      elsif kumagaya >= now
+      elsif kumagaya > now
         can_take_kumagaya_minute.push(kumagaya)
       end
     end
@@ -611,7 +611,7 @@ class HomeController < ApplicationController
     takasaka_list_minute.each do |takasaka|
       if can_take_takasaka_minute.length >= 3
         break
-      elsif takasaka >= now
+      elsif takasaka > now
         can_take_takasaka_minute.push(takasaka)
       end
     end
@@ -620,7 +620,7 @@ class HomeController < ApplicationController
     kita_sakado_list_minute.each do |kita_sakado|
       if can_take_kita_sakado_minute.length >= 3
         break
-      elsif kita_sakado >= now
+      elsif kita_sakado > now
         can_take_kita_sakado_minute.push(kita_sakado)
       end
     end
@@ -686,7 +686,7 @@ class HomeController < ApplicationController
     takasaka_list_minute.each do |takasaka|
       if can_take_takasaka_minute.length >= 3
         break
-      elsif takasaka >= now
+      elsif takasaka > now
         can_take_takasaka_minute.push(takasaka)
       end
     end
@@ -695,7 +695,7 @@ class HomeController < ApplicationController
     kita_sakado_list_minute.each do |kita_sakado|
       if can_take_kita_sakado_minute.length >= 3
         break
-      elsif kita_sakado >= now
+      elsif kita_sakado > now
         can_take_kita_sakado_minute.push(kita_sakado)
       end
     end
@@ -742,7 +742,7 @@ class HomeController < ApplicationController
     kumagaya_list_minute.each do |kumagaya|
       if can_take_kumagaya_minute.length >= 3
         break
-      elsif kumagaya >= now
+      elsif kumagaya > now
         can_take_kumagaya_minute.push(kumagaya)
       end
     end
@@ -775,7 +775,7 @@ class HomeController < ApplicationController
     kumagaya_list_minute.each do |kumagaya|
       if can_take_kumagaya_minute.length >= 3
         break
-      elsif kumagaya >= now
+      elsif kumagaya > now
         can_take_kumagaya_minute.push(kumagaya)
       end
     end
