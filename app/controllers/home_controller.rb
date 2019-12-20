@@ -86,7 +86,7 @@ class HomeController < ApplicationController
     minutes_now = minutes
 
     takasaka_daiya = ["08:42","08:56",
-                      "09:11","09:26","09:33","09:41","09:56",
+                      "09:11","09:26","09:41","09:56",
                       "10:10","10:26","10:40","10:53",
                       "11:06","11:16","11:40","11:53",
                       "12:05","12:35","12:51",
@@ -107,7 +107,7 @@ class HomeController < ApplicationController
                          "15:18",
                          "16:13"].freeze
 
-    takasaka_list_minute = [522, 536, 551, 566, 573, 581, 596, 610, 626, 640,
+    takasaka_list_minute = [522, 536, 551, 566, 581, 596, 610, 626, 640,
                             653, 666, 676, 700, 713, 725, 755, 771, 785, 815,
                             831, 845, 875, 891, 905, 935, 951, 965, 996, 1011,
                             1025, 1041, 1071, 1090, 1120].freeze
@@ -339,7 +339,7 @@ class HomeController < ApplicationController
     minutes_now = minutes
 
     takasaka_daiya = ["08:20","08:25","08:28","08:30","08:35","08:41","08:42","08:45","08:49","08:50","08:55","08:58",
-                      "09:01","09:05","09:07","09:10","09:11","09:15","09:26","09:33","09:41","09:50","09:56",
+                      "09:01","09:05","09:07","09:09","09:10","09:11","09:15","09:26","09:33","09:41","09:50","09:56",
                       "10:04","10:10","10:20","10:26","10:29","10:36","10:40","10:42","10:43","10:45","10:52","10:53","10:56",
                       "11:02","11:05","11:06","11:16","11:27","11:40","11:53",
                       "12:05","12:21","12:35","12:51","12:55","12:59",
@@ -364,7 +364,7 @@ class HomeController < ApplicationController
                          "18:04"].freeze
 
     takasaka_list_minute = [500, 505, 508, 510, 515, 521, 522, 525, 529, 530, 535,
-                            538, 541, 545, 547, 550, 551, 555, 566, 573, 581, 590,
+                            538, 541, 545, 547, 549, 550, 551, 555, 566, 573, 581, 590,
                             596, 604, 610, 620, 626, 629, 636, 640, 642, 643, 645,
                             652, 653, 656, 662, 665, 666, 676, 687, 700, 713, 725,
                             741, 755, 771, 775, 779, 785, 790, 795, 800, 805, 809,
@@ -508,7 +508,12 @@ class HomeController < ApplicationController
   def Go_from_kumagaya(hour,minutes)
     hour_now = hour
     minutes_now = minutes
-    kumagaya_daiya = ["08:05","08:15","08:20","10:00","10:05","10:10","12:30","12:40","14:30","16:20"].freeze
+    kumagaya_daiya = ["08:05","08:15","08:20",
+                      "10:00","10:05","10:10",
+                      "12:30","12:40",
+                      "14:30",
+                      "16:20"].freeze
+
     kumagaya_list_minute = [485, 495, 500, 600, 605, 610, 750, 760, 870, 980].freeze
     now = hour_now*60 + minutes_now
     can_take_kumagaya_minute = []
@@ -538,7 +543,9 @@ class HomeController < ApplicationController
   def Go_from_Kumagaya_saturday(hour,minutes)
     hour_now = hour
     minutes_now = minutes
-    kumagaya_daiya = ["08:20","10:00","12:30"].freeze
+    kumagaya_daiya = ["08:20",
+                      "10:00",
+                      "12:30"].freeze
     kumagaya_list_minute = [500, 600, 750].freeze
     now = hour_now*60 + minutes_now
     can_take_kumagaya_minute = []
@@ -767,9 +774,8 @@ class HomeController < ApplicationController
     kumagaya_daiya = ["11:45",
                       "15:30",
                       "17:20",
-                      "18:20",
                       "19:10"].freeze
-    kumagaya_list_minute = [705, 930, 1040, 1100, 1150].freeze
+    kumagaya_list_minute = [705, 930, 1040, 1150].freeze
     now = hour_now*60 + minutes_now
     can_take_kumagaya_minute = []
     kumagaya_list_minute.each do |kumagaya|
