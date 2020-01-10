@@ -17,17 +17,24 @@
 
  header{
    background-color: black;
-   width: 80%;
+   width: 90%;
    height: 120px;
    margin: 0px auto;
  }
 
- .header_title{
+ header a{
+   float: left;
+   padding: 25px 50px;
+   font-size: 50px;
+   text-align: center;
+ }
+
+ /* .header_title{
    float: left;
    padding: 25px 50px;
    font-size: 50px;
    padding: 0px auto;
- }
+ } */
 
  .header_title a{
    color: white;
