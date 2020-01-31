@@ -6,21 +6,28 @@ application up and running.
 Things you may want to cover:
 
 * Ruby version
+
 Ruby 2.4.1
 
 * System dependencies
+
 heroku.inc's server.(https://jp.heroku.com/)
 
 * Configuration
+follow to Ruby on Rails 
+
 
 * Database creation
+
 no database
 
 * Database initialization
+
 no database
 
 
 * How to run the test suite
+
 My local server, puma.
 
 * Services (job queues, cache servers, search engines, etc.)
