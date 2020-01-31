@@ -127,6 +127,7 @@ Fourth, the current time is selected. By default, the current time is entered, b
 
 
 * Deployment instructions
+
 I use heroku server.
 
-* ...
+Thanks to read Readme.md!!
