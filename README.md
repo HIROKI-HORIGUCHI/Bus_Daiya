@@ -26,7 +26,10 @@ My local server, puma.
 * Services (job queues, cache servers, search engines, etc.)
 
 ・Consepts for users
-At Tokyo Denki University's Hatoyama Campus, students take a look at school bus timetables on hard-to-find sites, check them on paper, or learn them.
+
+At Tokyo Denki University's Hatoyama Campus, students take a look at school bus timetables on hard-to-find sites, check them 
+
+on paper, or learn them.
 
 (東京電機大学鳩山キャンパスでは、学生がスクールバスの時刻表を見辛いサイトで見るか、紙で確認する、または覚えるという方法をとっている。)
 
